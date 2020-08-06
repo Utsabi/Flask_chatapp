@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Chat App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style>
+      #messages {
+        background-color: #ddd;
+        padding: 5px 10px;
+        border-radius: 10px;
+        color: #555;
+        margin-bottom: 5px;
+      }
+    </style>
+</head>
+<body>
+  <div class="text-center well"style="background-color: #5f5f5f;color: #f1f1f1;"><h1><b>Flask Chat App</b></h1></div>
+
+<div class="container">
+  <div class="col-sm-8">
+    <h2 class="text-center well" style="background-color: #5f5f5f;color: #f1f1f1;">Welcome to chat room {{ room }}</h2>
+    <div class="no_message" id="messages">
+      <div class="message_holder"></div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <form id="message_input_form">
+      <div style="padding: 50px;"></div>
+      <b>Type your message below <span class="glyphicon glyphicon-arrow-down"></span></b>
+      <div class="clearfix" style="margin-top: 5px;"></div>
+      <input type="text" class="message form-control" id="message_input" placeholder=" your message here">
+      <div style="padding-top: 15px;"></div>
+      <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-send"></span> Send</button>
+      <a href="{{ url_for('logout') }}" class ="btn btn-primary btn-block">Logout</a>
+
+    </form>
+    </div>
+</div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+    const socket = io.connect("http://127.0.0.1:5000");
+
+    socket.on('connect', function () {
+        socket.emit('join_room', {
+            username: "{{ username }}",
+            room: "{{ room }}"
+        });
+
+        let message_input = document.getElementById('message_input');
+
+        document.getElementById('message_input_form').onsubmit = function (e) {
+            e.preventDefault();
+            let message = message_input.value.trim();
+            if (message.length) {
+                socket.emit('send_message', {
+                    username: "{{ username }}",
+                    room: "{{ room }}",
+                    message: message
+                })
+            }
+            message_input.value = '';
+            message_input.focus();
+        }
+    });
+
+    window.onbeforeunload = function () {
+        socket.emit('leave_room', {
+            username: "{{ username }}",
+            room: "{{ room }}"
+        })
+    };
+
+    socket.on('receive_message', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${data.username}:&nbsp;</b> ${data.message}`;
+        document.getElementById('messages').appendChild(newNode);
+    });
+
+    socket.on('join_room_announcement', function (data) {
+        console.log(data);
+        if (data.username !== "{{ username }}") {
+            const newNode = document.createElement('div');
+            newNode.innerHTML = `<b>${data.username}</b> has joined the room`;
+            document.getElementById('messages').appendChild(newNode);
+        }
+    });
+
+    socket.on('leave_room_announcement', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${data.username}</b> has left the room`;
+        document.getElementById('messages').appendChild(newNode);
+    });
+</script>
+</html>

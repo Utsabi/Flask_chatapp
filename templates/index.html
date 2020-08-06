@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My College App</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:500|Nunito+Sans:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<h1>My College App</h1>
+<h3>Hi {% if current_user.is_authenticated %}{{current_user.username}}
+  {% else %}Guest <br>Please login first <a href="{{ url_for('login') }}" class ="btn btn-primary">Login</a> {% endif %}</h3>
+
+<header class="header">
+
+      <div class="text-center well"style="background-color: #5f5f5f;color: #f1f1f1;"><h1><b>College Chat App</b></h1></div>
+</header>
+
+<main>
+  <section class="contacts">
+    <div class="container">
+      <div class="contacts__columns">
+        <section class="cotacts__info">
+          <h1>Contact Info:</h1>
+          <p>We are an academic instuitution made up of students, scholars, old collegians and staff members.
+             Our rich history is the foundation for our values We are diverse, welcoming, accepting and passionate about being the best we can be.
+             Join us to make your college experience unforgettable</p>
+          <div class="cotacts__meta-info">
+            <p><b>Address:</b>  10111 Santa Monica Boulevard, LA</p>
+            <p><b>Phone:</b>  +44 987 065 908</p>
+            <p><b>Email:</b>  info@Example.com</p>
+            <p><b>Fax:</b>  +44 987 065 909</p>
+          </div>
+        </section>
+        <section class="cotacts__form form">
+          <form action="/chat" >
+
+            <div class="form__control">
+              <label>Enter your username:</label>
+              <input type="text" name="username">
+            </div>
+
+            <div class="form__control">
+              <label>Enter room id:</label>
+              <input type="text" name="room">
+            </div>
+
+            <button type="submit" class="button">Enter the room</button>
+          </form>
+          <br>
+          <a href="{{ url_for('logout') }}" class ="btn btn-primary">Logout</a>
+
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer__columns container">
+    <div class="footer__column-copyright">
+      <div class="footer__company">Piroll Design, Inc.</div>
+      <div class="footer__copyright">© 2017 Piroll. All rights reserved. Designed by robirurk.</div>
+  </div>
+
+    <div class="footer__column-contacts">hello@pirolltheme.com +44 987 065 908</div>
+    <div class="footer__links">
+      <ul class="footer__links-list">
+        <li><a href="#" class="footer__link">Projects</a></li>
+        <li><a href="#" class="footer__link">About</a></li>
+        <li><a href="#" class="footer__link">Services</a></li>
+        <li><a href="#" class="footer__link">Carreer</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__links">
+      <ul class="footer__links-list">
+        <li><a href="#" class="footer__link">News</a></li>
+        <li><a href="#" class="footer__link">Events</a></li>
+        <li><a href="#" class="footer__link">Contact</a></li>
+        <li><a href="#" class="footer__link">Legals</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__column-social">
+      <ul class="footer__links-list">
+        <li><a href="#" class="footer__link">Facebook</a></li>
+        <li><a href="#" class="footer__link">Twitter</a></li>
+        <li><a href="#" class="footer__link">Instagram</a></li>
+        <li><a href="#" class="footer__link">Dribbble</a></li>
+      </ul>
+    </div>
+  </div>
+
+</footer>
+
+</body>
+</html>
